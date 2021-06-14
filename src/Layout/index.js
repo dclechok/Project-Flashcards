@@ -1,9 +1,10 @@
 import React from "react";
 import Header from "./Header";
 import NotFound from "./NotFound";
-import CreateDeck from "./CreateDeck";
-
+import CreateDeckButton from "./CreateDeckButton";
+import DeckList from './DeckList';
 import { Route, Switch } from "react-router-dom";
+
 function Layout() {
   return (
     <React.Fragment>
@@ -12,7 +13,8 @@ function Layout() {
         {/* TODO: Implement the screen starting here */}
         <Switch>
           <Route exact path="/">
-            <CreateDeck />
+            <CreateDeckButton />{/* create a new deck button*/}
+            <DeckList /> {/* This renders our list of existing decks on the home page*/}
           </Route>
           <Route path="/decks/new">
             <p>Breadcrumbs</p>
