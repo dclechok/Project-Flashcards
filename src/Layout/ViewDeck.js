@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { readDeck } from "../utils/api/index";
-import { DeleteCardHandler, DeleteDeckHandler } from './deleteButton';
+import { deleteCardPrompt } from './deleteButton';
 
-function ViewDeck() {
+
+function ViewDeck( { setDelCard }) {
   const { deckId } = useParams();
   const abortController = new AbortController();
   const [deck, setDeck] = useState([]);
@@ -21,6 +22,10 @@ function ViewDeck() {
     return () => abortController.abort();
   }, []);
 
+  const deleteCardHandler = (deckId) => {
+      deleteCardPrompt();
+  }
+
   return (
     <React.Fragment>
       <h3>{deck.name}</h3>
@@ -36,7 +41,7 @@ function ViewDeck() {
       <button type="button" className="btn btn-primary">
         + Add Cards
       </button>
-      <button type="button" className="btn btn-danger" onClick={deleteDeckHandler}>
+      <button type="button" className="btn btn-danger">
         Delete
       </button>
       <h4>Cards</h4>
@@ -46,7 +51,7 @@ function ViewDeck() {
               <p>{card.front}</p>
               <p>{card.back}</p>
               <button type="button" className="btn btn-secondary">Edit</button>
-              <button type="button" className="btn btn-danger" onClick={() => DeleteCardHandler(key)}>Delete</button>
+              <button type="button" className="btn btn-danger" onClick={deleteCardHandler(key)}>Delete</button>
             </div>
           );
         })};

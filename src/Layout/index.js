@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import NotFound from "./NotFound";
-import { listDecks } from "../utils/api/index";
+import { listDecks, deleteCard } from "../utils/api/index";
 import CreateDeckButton from "./CreateDeckButton";
 import DeckList from "./DeckList";
 import ViewDeck from "./ViewDeck";
 import StudyDeck from './StudyDeck';
+import { deleteCardPrompt } from './deleteButton';
 import { Route, Switch } from "react-router-dom";
 
 function Layout() {
   const [deckList, setDeckList] = useState([]);
+  const [delCard, setDelCard] = useState('');
+
   const controller = new AbortController();
+
+  useEffect(() => { //creates a list of all decks, and stores it in state variable 'deckList'
+    async function deleteTheCard(){
+      try{
+          const response = await deleteCard(delCard, controller.signal);
+          setDeckList(response);
+        }catch(err){
+          console.log("Deleting the card aborted", err);
+        }
+      }
+      deleteTheCard();
+      return () => controller.abort();
+    }, [delCard]);
+
 
   useEffect(() => { //creates a list of all decks, and stores it in state variable 'deckList'
     async function loadList(){
@@ -41,7 +58,7 @@ function Layout() {
             <p>Create Deck</p>
           </Route>
           <Route exact path="/decks/:deckId">
-            <ViewDeck />
+            <ViewDeck setDelCard={setDelCard} />
           </Route>
           <Route exact path="/decks/:deckId/study">
             <StudyDeck />
