@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { readDeck } from "../utils/api/index";
+import { deleteCard, readDeck } from "../utils/api/index";
 import { deleteCardPrompt } from './deleteButton';
 
 
@@ -23,7 +23,7 @@ function ViewDeck( { setDelCard }) {
   }, []);
 
   const deleteCardHandler = (deckId) => {
-      deleteCardPrompt();
+      if (deleteCardPrompt()) setDelCard(deckId);
   }
 
   return (
@@ -51,7 +51,7 @@ function ViewDeck( { setDelCard }) {
               <p>{card.front}</p>
               <p>{card.back}</p>
               <button type="button" className="btn btn-secondary">Edit</button>
-              <button type="button" className="btn btn-danger" onClick={deleteCardHandler(key)}>Delete</button>
+              <button type="button" className="btn btn-danger" onClick={() => deleteCardHandler(deck.id)}>Delete</button>
             </div>
           );
         })};

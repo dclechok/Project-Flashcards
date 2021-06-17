@@ -19,7 +19,7 @@ function Layout() {
     async function deleteTheCard(){
       try{
           const response = await deleteCard(delCard, controller.signal);
-          setDeckList(response);
+          console.log(response, 'deleting card')
         }catch(err){
           console.log("Deleting the card aborted", err);
         }
