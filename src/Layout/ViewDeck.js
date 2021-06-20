@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { deleteCard, readDeck } from "../utils/api/index";
-import { deleteCardPrompt } from './deleteButton';
+import { readDeck } from "../utils/api/index";
+import { deleteCardPrompt } from "./deleteButton";
+import { deleteDeckPrompt } from "./deleteButton";
 
-
-function ViewDeck( { setDelCard }) {
+function ViewDeck({ setDelCard, setDelDeck }) {
   const { deckId } = useParams();
   const abortController = new AbortController();
   const [deck, setDeck] = useState([]);
@@ -22,9 +22,18 @@ function ViewDeck( { setDelCard }) {
     return () => abortController.abort();
   }, []);
 
-  const deleteCardHandler = (deckId) => {
-      if (deleteCardPrompt()) setDelCard(deckId);
-  }
+  const deleteCardHandler = (cardId) => {
+    if (deleteCardPrompt()) {
+      setDelCard(cardId);
+    }
+  };
+
+  const deleteDeckHandler = (deckId) => {
+    if (deleteDeckPrompt()) {
+      setDelDeck(deckId);
+      console.log(deckId);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -41,20 +50,30 @@ function ViewDeck( { setDelCard }) {
       <button type="button" className="btn btn-primary">
         + Add Cards
       </button>
-      <button type="button" className="btn btn-danger">
+      <button type="button" className="btn btn-danger" onClick={deleteDeckHandler}>
         Delete
       </button>
       <h4>Cards</h4>
-        {deck.cards?.map((card, key) => {
-          return (
-            <div className="card" id={key} style={{margin: '0 10% 20px 10%'}}>
-              <p>{card.front}</p>
-              <p>{card.back}</p>
-              <button type="button" className="btn btn-secondary">Edit</button>
-              <button type="button" className="btn btn-danger" onClick={() => deleteCardHandler(deck.id)}>Delete</button>
-            </div>
-          );
-        })};
+      {deck.cards?.map((card, key) => {
+          {console.log(card.id)}
+        return (
+          <div className="card" id={key} style={{ margin: "0 10% 20px 10%" }}>
+            <p>{card.front}</p>
+            <p>{card.back}</p>
+            <button type="button" className="btn btn-secondary">
+              Edit
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => deleteCardHandler(card.id)}
+            >
+              Delete
+            </button>
+          </div>
+        );
+      })}
+      ;
     </React.Fragment>
   );
 }
