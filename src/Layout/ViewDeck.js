@@ -4,33 +4,29 @@ import { readDeck } from "../utils/api/index";
 import { deleteCardPrompt } from "./deleteButton";
 import { deleteDeckPrompt } from "./deleteButton";
 
-function ViewDeck({ setDelCard, setDelDeck }) {
+function ViewDeck() {
   const { deckId } = useParams();
   const abortController = new AbortController();
   const [deck, setDeck] = useState([]);
 
-  useEffect(() => {
-    async function readTheDeck() {
-      try {
-        const response = await readDeck(deckId, abortController.signal);
-        setDeck(response);
-      } catch (err) {
-        console.log(err);
-      }
+  async function readTheDeck() {
+    try {
+      const response = await readDeck(deckId, abortController.signal);
+      setDeck(response);
+    } catch (err) {
+      console.log(err);
     }
-    readTheDeck();
     return () => abortController.abort();
-  }, []);
+  }
 
   const deleteCardHandler = (cardId) => {
     if (deleteCardPrompt()) {
-      setDelCard(cardId);
+
     }
   };
 
   const deleteDeckHandler = (deckId) => {
     if (deleteDeckPrompt()) {
-      setDelDeck(deckId);
       console.log(deckId);
     }
   };
@@ -50,12 +46,18 @@ function ViewDeck({ setDelCard, setDelDeck }) {
       <button type="button" className="btn btn-primary">
         + Add Cards
       </button>
-      <button type="button" className="btn btn-danger" onClick={deleteDeckHandler}>
+      <button
+        type="button"
+        className="btn btn-danger"
+        onClick={deleteDeckHandler}
+      >
         Delete
       </button>
       <h4>Cards</h4>
       {deck.cards?.map((card, key) => {
-          {console.log(card.id)}
+        {
+          console.log(card.id);
+        }
         return (
           <div className="card" id={key} style={{ margin: "0 10% 20px 10%" }}>
             <p>{card.front}</p>
@@ -72,8 +74,7 @@ function ViewDeck({ setDelCard, setDelDeck }) {
             </button>
           </div>
         );
-      })}
-      ;
+      })};
     </React.Fragment>
   );
 }

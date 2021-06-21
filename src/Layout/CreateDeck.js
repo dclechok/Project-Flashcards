@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { createDeck } from "../utils/api/index";
 
 function CreateDeck() {
+
   const newDeckTemplate = {
     //new deck template
     name: "",
@@ -10,29 +11,39 @@ function CreateDeck() {
   };
 
   const [newDeck, setNewDeck] = useState(newDeckTemplate); //default new deck state var
+  const [newDeckId, setNewDeckId] = useState(0);
+  const history = useHistory();
 
   const handleFormChange = (event) => {
     setNewDeck({
       ...newDeck,
       [event.target.id]: event.target.value,
     }); //create a controlled input
-    console.log(newDeck);
   };
 
-  async function createTheDeck() { //create deck with call to api with createDeck function
+  function onSubmitHandler(event) {
+    event.preventDefault();
     const abortController = new AbortController();
-    try {
-      const response = await createDeck(newDeck, abortController.signal); //is response necessary?
-    } catch (err) {
+    async function createTheDeck() {
+      
+      //create deck with call to api with createDeck function
+      try {
+        const newDeckInfo = await createDeck(newDeck, abortController.signal); // data from the new deck we create
+        setNewDeckId(newDeckInfo.id);
+        history.push(`/decks/${newDeckInfo.id}`);
+      } catch (err) {
+        console.log(err, "Creating a new deck failed");
+      }
     }
-    return () => abortController.abort;
+    createTheDeck();
+    return () => abortController.abort();
   }
 
   return (
     <React.Fragment>
       <h1>Create Deck</h1>
-      <form>
-        <label for="name">Name</label>
+      <form onSubmit={onSubmitHandler}>
+        <label htmlFor="name">Name</label>
         <br />
         <input
           type="text"
@@ -44,7 +55,7 @@ function CreateDeck() {
           onChange={handleFormChange} //create controlled input
         ></input>
         <br />
-        <label for="description">Description</label>
+        <label htmlFor="description">Description</label>
         <br />
         <textarea
           type="textarea"
@@ -62,11 +73,7 @@ function CreateDeck() {
             Cancel
           </button>
         </Link>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={createTheDeck}
-        >
+        <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </form>
