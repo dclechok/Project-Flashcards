@@ -1,33 +1,8 @@
 {
   "decks": [
     {
-      "id": 1,
-      "name": "Dan",
-      "description": "Lechok"
-    },
-    {
-      "name": "React Router",
-      "description": "React Router is a collection of navigational components that compose declaratively with your application.",
-      "id": 2
-    },
-    {
-      "name": "erere",
-      "description": "aaaer",
-      "id": 3
-    },
-    {
-      "name": "eeaa",
-      "description": "aaaa",
-      "id": 4
-    },
-    {
-      "name": "aaa",
-      "description": "ffff",
-      "id": 5
-    },
-    {
-      "name": "erer",
-      "description": "aaaaaaa",
+      "name": "Dan ",
+      "description": "Lechok",
       "id": 6
     }
   ],

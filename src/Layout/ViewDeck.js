@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { readDeck } from "../utils/api/index";
-import { deleteCardPrompt } from "./deleteButton";
-import { deleteDeckPrompt } from "./deleteButton";
+import { useParams, Link, useHistory } from "react-router-dom";
+import { deleteDeck, readDeck } from "../utils/api/index";
 
 function ViewDeck() {
   const { deckId } = useParams();
+  const history = useHistory();
   const abortController = new AbortController();
   const [deck, setDeck] = useState([]);
 
@@ -24,15 +23,17 @@ function ViewDeck() {
     readTheDeck();
   }, [deckId]);
 
-  const deleteCardHandler = (cardId) => {
-    if (deleteCardPrompt()) {
-      console.log("hello test");
-    }
-  };
+  // const deleteCardHandler = (cardId) => {
+  //   if (deleteCardPrompt()) {
+  //     console.log("hello test");
+  //   }
+  // };
 
-  const deleteDeckHandler = (deckId) => {
-    if (deleteDeckPrompt()) {
-      console.log(deckId);
+  const deleteDeckHandler = async () => {
+    if(window.confirm("Delete the deck?")){
+      //delete deck here
+      await deleteDeck(deckId, abortController.signal);
+      history.push('/');
     }
   };
 
@@ -45,14 +46,12 @@ function ViewDeck() {
           Edit
         </button>
       </Link>
-      <Link to={`/decks/${deckId}/study`}>
-        <button type="button" className="btn btn-primary">
+      <Link to={`/decks/${deckId}/study`} className="btn btn-primary" >
           Study
-        </button>
       </Link>
-      <button type="button" className="btn btn-primary">
+      <Link to={`/decks/${deckId}/cards/new`} className="btn btn-primary">
         + Add Cards
-      </button>
+      </Link>
       <button
         type="button"
         className="btn btn-danger"
@@ -75,7 +74,7 @@ function ViewDeck() {
               <button
                 type="button"
                 className="btn btn-danger"
-                onClick={() => deleteCardHandler(card.id)}
+                // onClick={() => deleteCardHandler(card.id)}
               >
                 Delete
               </button>

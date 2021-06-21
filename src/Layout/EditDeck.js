@@ -5,7 +5,6 @@ import { readDeck, updateDeck } from "../utils/api/index";
 function EditDeck() {
   const { deckId } = useParams(); //get the current deck's id for input placeholder data
   const [deck, setDeck] = useState({}); //incoming deck
-  const [editedDeck, setEditedDeck] = useState({}); //the currently edited deck
   const abortController = new AbortController();
   const history = useHistory();
 
@@ -31,16 +30,14 @@ function EditDeck() {
     console.log("submit form");
     async function updateTheDeck() {
       try{
-        const response = await updateDeck(deck, abortController.signal);
+        await updateDeck(deck, abortController.signal);
         //what can we use response for?
         history.push(`/decks/${deckId}`); //push our user to the url of the newly created deck
       }catch (err) {
         console.log(err, "Updating the deck failed");
       }
-
     }
     updateTheDeck();
-    return () => abortController.abort();
   };
 
   return (
@@ -51,28 +48,25 @@ function EditDeck() {
         <br />
         <input
           type="text"
-          name="name"
           id="name"
           style={{ width: "100%" }}
-          placeholder={deck.name}
-          value={editedDeck.name}
+          placeholder="Deck Name"
+          value={deck.name}
           onChange={onChangeHandler}
         />
         <br />
         <label htmlFor="description">Description</label>
         <br />
         <textarea
-          type="text"
-          name="name"
           id="description"
           style={{ width: "100%" }}
-          placeholder={deck.description}
-          value={editedDeck.description}
+          placeholder="Deck description"
+          value={deck.description}
           onChange={onChangeHandler}
         />
         <br />
         <Link to={`/decks/${deckId}`}>
-          <button className="btn btn-secondary">Cancel</button>
+          <button className="btn btn-secondary" type="button">Cancel</button>
         </Link>
         <button className="btn btn-primary" type="submit">
           Submit
