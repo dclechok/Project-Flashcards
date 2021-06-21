@@ -11,7 +11,6 @@ function CreateDeck() {
   };
 
   const [newDeck, setNewDeck] = useState(newDeckTemplate); //default new deck state var
-  const [newDeckId, setNewDeckId] = useState(0);
   const history = useHistory();
 
   const handleFormChange = (event) => {
@@ -25,17 +24,15 @@ function CreateDeck() {
     event.preventDefault();
     const abortController = new AbortController();
     async function createTheDeck() {
-      
       //create deck with call to api with createDeck function
       try {
         const newDeckInfo = await createDeck(newDeck, abortController.signal); // data from the new deck we create
-        setNewDeckId(newDeckInfo.id);
-        history.push(`/decks/${newDeckInfo.id}`);
+        history.push(`/decks/${newDeckInfo.id}`); //push our user to the url of the newly created deck
       } catch (err) {
         console.log(err, "Creating a new deck failed");
       }
     }
-    createTheDeck();
+    createTheDeck(); 
     return () => abortController.abort();
   }
 
@@ -53,7 +50,7 @@ function CreateDeck() {
           placeholder="Deck Name"
           value={newDeck.name}
           onChange={handleFormChange} //create controlled input
-        ></input>
+        / >
         <br />
         <label htmlFor="description">Description</label>
         <br />
@@ -65,7 +62,7 @@ function CreateDeck() {
           placeholder="Brief description of the deck"
           value={newDeck.description}
           onChange={handleFormChange} //create controlled input
-        ></textarea>
+        / >
         <br />
         <br />
         <Link to="/">
