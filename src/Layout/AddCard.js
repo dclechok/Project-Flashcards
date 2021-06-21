@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { readDeck } from "../utils/api";
+import { readDeck, createCard } from "../utils/api";
 
 function AddCard() {
   const { deckId } = useParams();
+  const newCardTemplate = {
+    deckId: deckId,
+    front: '',
+    back: ''
+    }
   const [deck, setDeck] = useState({});
   const abortController = new AbortController();
-  const [newCard, setNewCard] = useState({
-      deckId: deckId,
-      front: '',
-      back: ''
-  });
+  const [newCard, setNewCard] = useState(newCardTemplate);
+
 
   async function readTheDeck() {
     try {
@@ -20,7 +22,6 @@ function AddCard() {
       console.log(err, 'Failure reading deck');
     }
   }
-
 
   useEffect(() => {
     readTheDeck();
@@ -34,13 +35,15 @@ function AddCard() {
     console.log(newCard, 'form change');
   };
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
     setNewCard({
         [event.target.id]: event.target.value,
         deckId: deckId,
     });
-    console.log(newCard, 'on submit');
+    //createCard
+    await createCard(deckId, newCard,abortController.signal);
+    setNewCard(newCardTemplate);
   };
 
   return (

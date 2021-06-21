@@ -43,13 +43,8 @@ function DeckList() {
             View
           </button>
         </Link>
-        <Link to={`/decks/${deck.id}/study`}>  {/* Link to the study page */}
-          <button
-            type="button"
-            className="btn btn-primary"
-          >
+        <Link to={`/decks/${deck.id}/study`} className="btn btn-primary">  {/* Link to the study page */}
             Study
-          </button>
         </Link>
         <button
           type="button"

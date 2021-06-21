@@ -1,10 +1,17 @@
 {
   "decks": [
     {
-      "name": "Dan ",
+      "name": "Dan aereae",
       "description": "Lechok",
       "id": 6
     }
   ],
-  "cards": []
+  "cards": [
+    {
+      "deckId": 6,
+      "front": "This is a new card",
+      "back": "This is a new card back",
+      "id": 3
+    }
+  ]
 }

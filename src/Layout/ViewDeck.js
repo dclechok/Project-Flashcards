@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useHistory } from "react-router-dom";
-import { deleteDeck, readDeck } from "../utils/api/index";
+import { deleteDeck, readDeck, deleteCard } from "../utils/api/index";
 
 function ViewDeck() {
   const { deckId } = useParams();
@@ -12,7 +12,6 @@ function ViewDeck() {
     try {
       const response = await readDeck(deckId, abortController.signal);
       setDeck(response);
-      console.log(response);
     } catch (err) {
       console.log(err);
     }
@@ -23,17 +22,19 @@ function ViewDeck() {
     readTheDeck();
   }, [deckId]);
 
-  // const deleteCardHandler = (cardId) => {
-  //   if (deleteCardPrompt()) {
-  //     console.log("hello test");
-  //   }
-  // };
-
   const deleteDeckHandler = async () => {
     if(window.confirm("Delete the deck?")){
       //delete deck here
       await deleteDeck(deckId, abortController.signal);
       history.push('/');
+    }
+  };
+
+  const deleteCardHandler = async (cardId) => {
+    if(window.confirm("Delete the card?")){
+      //delete card here
+      await deleteCard(cardId, abortController.signal);
+      await readTheDeck();
     }
   };
 
@@ -74,7 +75,7 @@ function ViewDeck() {
               <button
                 type="button"
                 className="btn btn-danger"
-                // onClick={() => deleteCardHandler(card.id)}
+                onClick={() => deleteCardHandler(card.id)}
               >
                 Delete
               </button>
