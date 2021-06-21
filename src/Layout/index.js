@@ -1,7 +1,8 @@
 import React from "react";
+import { Route, Switch, Link } from "react-router-dom";
+//components
 import Header from "./Header";
 import NotFound from "./NotFound";
-import CreateDeckButton from "./CreateDeckButton";
 import DeckList from "./DeckList";
 import ViewDeck from "./ViewDeck";
 import StudyDeck from "./StudyDeck";
@@ -9,8 +10,6 @@ import CreateDeck from "./CreateDeck";
 import EditCard from "./EditCard";
 import EditDeck from "./EditDeck";
 import AddCard from "./AddCard";
-
-import { Route, Switch } from "react-router-dom";
 
 function Layout() {
 
@@ -21,7 +20,7 @@ function Layout() {
         {/* TODO: Implement the screen starting here */}
         <Switch>
           <Route exact path="/">
-            <CreateDeckButton />
+            <Link to="/decks/new" className="btn btn-secondary" style={{marginBottom: '2%', marginLeft: '20%'}}>+ Create Deck</Link>
             {/* create a new deck button*/}
             <DeckList />
             {/* This renders our list of existing decks on the home page*/}

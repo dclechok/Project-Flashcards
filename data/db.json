@@ -1,8 +1,8 @@
 {
   "decks": [
     {
-      "name": "Dan aereae",
-      "description": "Lechok",
+      "name": "Dan",
+      "description": "Lechok!",
       "id": 6
     }
   ],
@@ -11,7 +11,19 @@
       "deckId": 6,
       "front": "This is a new card",
       "back": "This is a new card back",
+      "id": 2
+    },
+    {
+      "deckId": 6,
+      "front": "This is card two front",
+      "back": "this is card two back",
       "id": 3
+    },
+    {
+      "deckId": 6,
+      "front": "thhis is card three front",
+      "back": "this is card three back",
+      "id": 4
     }
   ]
 }

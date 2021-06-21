@@ -38,18 +38,17 @@ function DeckList() {
           <span style={{float: 'right', fontSize: '14px', marginTop: '2%'}}>{`${deck.cards.length} cards`}</span>
         </h4>
         <p>{deck.description}</p>
-        <Link to={`/decks/${deck.id}`}> {/* Link to the basic deck display page */}
-          <button type="button" className="btn btn-secondary">
+        <Link to={`/decks/${deck.id}`} className="btn btn-secondary" style={{width: "12%"}}> {/* Link to the basic deck display page */}
             View
-          </button>
         </Link>
-        <Link to={`/decks/${deck.id}/study`} className="btn btn-primary">  {/* Link to the study page */}
+        <Link to={`/decks/${deck.id}/study`} className="btn btn-primary" style={{width: "12%"}}>  {/* Link to the study page */}
             Study
         </Link>
         <button
           type="button"
           className="btn btn-danger"
           onClick={() => onClickHandler(deck.id)}
+          style={{width: "12%"}}
         >
           Delete
         </button>

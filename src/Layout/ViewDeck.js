@@ -64,17 +64,16 @@ function ViewDeck() {
       {deck.cards &&
         deck.cards.map((card, key) => {
           return (
-            <div className="card" id={key} style={{ margin: "0 10% 20px 10%" }}>
+            <div className="card" id={key} style={{ margin: "0 20% 20px 20%" }}>
               <p>{card.front}</p>
               <p>{card.back}</p>
-              <Link to={`/decks/${deck.id}/cards/${card.id}/edit`}>
-                <button type="button" className="btn btn-secondary">
+              <Link to={`/decks/${deck.id}/cards/${card.id}/edit`} style={{width: "14%"}} className="btn btn-secondary">
                   Edit
-                </button>
               </Link>
               <button
                 type="button"
                 className="btn btn-danger"
+                style={{width: "14%"}}
                 onClick={() => deleteCardHandler(card.id)}
               >
                 Delete

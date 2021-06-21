@@ -12,8 +12,7 @@ function AddCard() {
   const [deck, setDeck] = useState({});
   const abortController = new AbortController();
   const [newCard, setNewCard] = useState(newCardTemplate);
-
-
+  
   async function readTheDeck() {
     try {
       const response = await readDeck(deckId, abortController.signal);
@@ -42,7 +41,7 @@ function AddCard() {
         deckId: deckId,
     });
     //createCard
-    await createCard(deckId, newCard,abortController.signal);
+    await createCard(deckId, newCard, abortController.signal);
     setNewCard(newCardTemplate);
   };
 
