@@ -31,7 +31,7 @@ function EditCard() {
         <span>
           <Link to="/">Home</Link> /
           <Link to={`/decks/${deckId}`}> {deck.name}</Link> /
-          <Link to={path}> Edit Card</Link>
+          <Link to={path}>Edit Card</Link>
         </span>
       </p>
       <AddEditCardForm cardId={cardId}/>

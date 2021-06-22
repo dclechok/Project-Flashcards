@@ -31,6 +31,7 @@ function DeckList() {
   };
 
   return deckList.map((deck, unusedKey) => {
+    console.log(deck);
     return (
       <div className="card" style={{marginLeft: '20%', marginRight: '20%', marginBottom: '2%'}}>
         <h4>

@@ -18,7 +18,6 @@ function ViewDeck() {
     }
     return () => abortController.abort();
   }
-
   useEffect(() => {
     readTheDeck();
   }, [deckId]);

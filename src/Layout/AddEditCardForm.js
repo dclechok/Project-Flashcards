@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { updateCard, createCard } from "../utils/api";
 
@@ -8,6 +8,7 @@ function AddEditCardForm({ cardId = null }) {
     deckId: deckId,
     front: "",
     back: "",
+    id: 0,
   };
 
   const abortController = new AbortController();
@@ -22,19 +23,23 @@ function AddEditCardForm({ cardId = null }) {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault(); //prevent page from reloading after form submission
-    if (cardId) { //if we sent in cardId to update
-      setNewCard({ //build the card we're updating
+    if (cardId) {
+      //if we sent in cardId to update
+      const card = {
+          ...newCard,
         [event.target.id]: event.target.value,
         deckId: deckId,
-        id: cardId, //keep the same id as card we're editing
-      });
-      try{
-        console.log(cardId, newCard);
-        await updateCard(newCard, abortController.signal); //update care
-      }catch (err) {
+        id: cardId,
+      };
+      setNewCard(card); //build the card we're updating
+      //keep the same id as card we're editing
+      try {
+        console.log(cardId, card.id);
+        await updateCard(card, abortController.signal); //update care
+      } catch (err) {
         console.log(err, "Error updating card");
       }
-    }else{
+    } else {
       //if we're not updating then create a brand new card
       setNewCard({
         [event.target.id]: event.target.value,
@@ -42,11 +47,11 @@ function AddEditCardForm({ cardId = null }) {
       });
       try {
         await createCard(deckId, newCard, abortController.signal);
-      }catch (err) {
+      } catch (err) {
         console.log(err, "Error creating card");
       }
     }
-    setNewCard(newCardTemplate);
+    // setNewCard(newCardTemplate);
   };
 
   return (
