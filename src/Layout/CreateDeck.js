@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { createDeck } from "../utils/api/index";
 
 function CreateDeck() {
-
+  const { path } = useRouteMatch(); //get our current path for nav
   const newDeckTemplate = {
     //new deck template
     name: "",
@@ -32,12 +32,17 @@ function CreateDeck() {
         console.log(err, "Creating a new deck failed");
       }
     }
-    createTheDeck(); 
+    createTheDeck();
     return () => abortController.abort();
   }
 
   return (
     <React.Fragment>
+      <p className="card" style={{ backgroundColor: "lightgray" }}>
+        <span>
+          <Link to="/">Home</Link> /<Link to={path}> Create Deck</Link>
+        </span>
+      </p>
       <h1>Create Deck</h1>
       <form onSubmit={onSubmitHandler}>
         <label htmlFor="name">Name</label>
@@ -50,7 +55,7 @@ function CreateDeck() {
           placeholder="Deck Name"
           value={newDeck.name}
           onChange={handleFormChange} //create controlled input
-        / >
+        />
         <br />
         <label htmlFor="description">Description</label>
         <br />
@@ -62,7 +67,7 @@ function CreateDeck() {
           placeholder="Brief description of the deck"
           value={newDeck.description}
           onChange={handleFormChange} //create controlled input
-        / >
+        />
         <br />
         <br />
         <Link to="/">

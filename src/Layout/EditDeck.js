@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, useHistory, useRouteMatch, Link } from "react-router-dom";
 import { readDeck, updateDeck } from "../utils/api/index";
 
 function EditDeck() {
+  const { path } = useRouteMatch();
   const { deckId } = useParams(); //get the current deck's id for input placeholder data
   const [deck, setDeck] = useState({}); //incoming deck
   const abortController = new AbortController();
@@ -29,19 +30,25 @@ function EditDeck() {
     event.preventDefault();
     console.log("submit form");
     async function updateTheDeck() {
-      try{
+      try {
         await updateDeck(deck, abortController.signal);
         //what can we use response for?
         history.push(`/decks/${deckId}`); //push our user to the url of the newly created deck
-      }catch (err) {
+      } catch (err) {
         console.log(err, "Updating the deck failed");
       }
     }
     updateTheDeck();
   };
-
+ 
+  console.log(path);
   return (
     <React.Fragment>
+      <p className="card" style={{ backgroundColor: "lightgray" }}>
+        <span>
+          <Link to="/">Home</Link> /<Link to={`/decks/${deck.id}`}> {deck.name}</Link> / <Link to={path}> Edit Deck</Link>
+        </span>
+      </p>
       <h1>Edit Deck</h1>
       <form onSubmit={onSubmitHandler}>
         <label htmlFor="name">Name</label>
@@ -66,7 +73,9 @@ function EditDeck() {
         />
         <br />
         <Link to={`/decks/${deckId}`}>
-          <button className="btn btn-secondary" type="button">Cancel</button>
+          <button className="btn btn-secondary" type="button">
+            Cancel
+          </button>
         </Link>
         <button className="btn btn-primary" type="submit">
           Submit

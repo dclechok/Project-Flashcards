@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useRouteMatch, Link } from "react-router-dom";
 import { readDeck, createCard } from "../utils/api";
 
 function AddCard() {
+  const { path } = useRouteMatch();
   const { deckId } = useParams();
   const newCardTemplate = {
     deckId: deckId,
-    front: '',
-    back: ''
-    }
+    front: "",
+    back: "",
+  };
   const [deck, setDeck] = useState({});
   const abortController = new AbortController();
   const [newCard, setNewCard] = useState(newCardTemplate);
-  
+
   async function readTheDeck() {
     try {
       const response = await readDeck(deckId, abortController.signal);
       setDeck(response);
     } catch (err) {
-      console.log(err, 'Failure reading deck');
+      console.log(err, "Failure reading deck");
     }
   }
 
@@ -28,17 +29,16 @@ function AddCard() {
 
   const handleFormChange = (event) => {
     setNewCard({
-        ...newCard,
+      ...newCard,
       [event.target.id]: event.target.value,
     }); //create a controlled input
-    console.log(newCard, 'form change');
   };
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     setNewCard({
-        [event.target.id]: event.target.value,
-        deckId: deckId,
+      [event.target.id]: event.target.value,
+      deckId: deckId,
     });
     //createCard
     await createCard(deckId, newCard, abortController.signal);
@@ -47,7 +47,14 @@ function AddCard() {
 
   return (
     <React.Fragment>
-      <h1>{deck.name}: Add Card</h1>
+      <p className="card" style={{ backgroundColor: "lightgray" }}>
+        <span>
+          <Link to="/">Home</Link> /
+          <Link to={`/decks/${deck.id}`}> {deck.name}</Link> /{" "}
+          <Link to={path}> Add Card</Link>
+        </span>
+      </p>
+      <h1>{deck.name}</h1>
       <form onSubmit={onSubmitHandler}>
         <label htmlFor="front">Front</label>
         <br />

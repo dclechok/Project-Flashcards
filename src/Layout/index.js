@@ -12,7 +12,6 @@ import EditDeck from "./EditDeck";
 import AddCard from "./AddCard";
 
 function Layout() {
-
   return (
     <React.Fragment>
       <Header />
@@ -20,7 +19,13 @@ function Layout() {
         {/* TODO: Implement the screen starting here */}
         <Switch>
           <Route exact path="/">
-            <Link to="/decks/new" className="btn btn-secondary" style={{marginBottom: '2%', marginLeft: '20%'}}>+ Create Deck</Link>
+            <Link
+              to="/decks/new"
+              className="btn btn-secondary"
+              style={{ marginBottom: "2%", marginLeft: "20%" }}
+            >
+              + Create Deck
+            </Link>
             {/* create a new deck button*/}
             <DeckList />
             {/* This renders our list of existing decks on the home page*/}
