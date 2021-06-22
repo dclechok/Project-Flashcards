@@ -1,29 +1,40 @@
 {
   "decks": [
     {
-      "name": "Dan",
-      "description": "Lechok!",
-      "id": 6
+      "name": "Daniel",
+      "description": "Lechok",
+      "id": 1
+    },
+    {
+      "name": "No no",
+      "description": "No no no",
+      "id": 2
     }
   ],
   "cards": [
     {
-      "deckId": 6,
-      "front": "This is a new card",
-      "back": "This is a new card back",
-      "id": 2
+      "deckId": 1,
+      "front": "this was side one",
+      "back": "trhis was side one back",
+      "id": 8
     },
     {
-      "deckId": 6,
-      "front": "This is card two front",
-      "back": "this is card two back",
-      "id": 3
+      "deckId": 1,
+      "front": "eerrr",
+      "back": "errr",
+      "id": 9
     },
     {
-      "deckId": 6,
-      "front": "thhis is card three front",
-      "back": "this is card three back",
-      "id": 4
+      "deckId": 2,
+      "front": "erere",
+      "back": "aerea",
+      "id": 11
+    },
+    {
+      "deckId": 2,
+      "front": "erea",
+      "back": "",
+      "id": 12
     }
   ]
 }

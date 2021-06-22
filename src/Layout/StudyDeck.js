@@ -31,10 +31,10 @@ function StudyDeck() {
       console.log("restartDeck: ", cardCounter, frontSide);
       if (lastCard && frontSide) {
         window.confirm("Would you like to restart deck?")
-          ? console.log("restart deck")
-          : history.push("/");
+          ? setCardCounter(0) //set our index of cards back at the beginning
+          : history.push("/"); //if not, send us to home page
         setLastCard(false);
-        setCardCounter(1);
+
       }
     }
     restartDeck();
