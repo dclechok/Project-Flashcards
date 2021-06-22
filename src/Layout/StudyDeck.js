@@ -9,6 +9,7 @@ function StudyDeck() {
   const [frontSide, setFrontSide] = useState(true); //starting cards on the front side of the card
   const abortController = new AbortController();
   const history = useHistory();
+  const [restart, setRestart] = useState(false); //restart the deck of cards
 
   async function readTheDeck() {
     try {
@@ -18,29 +19,32 @@ function StudyDeck() {
       console.log(err, "Failure reading deck");
     }
   }
+
   useEffect(() => {
     readTheDeck();
   }, []);
 
-  const restartDeck = async () => {
-    if (cardCounter === deck.cards.length) {
-      window.confirm("Would you like to restart deck?")
-        ? console.log("restart deck")
-        : history.push("/");
+  useEffect(() => {
+    function restartDeck() {
+      if (cardCounter === deck.cards.length) {
+        window.confirm("Would you like to restart deck?")
+          ? console.log("restart deck")
+          : history.push("/");
+      }
     }
-  };
+    restartDeck();
+  }, [restart]);
 
   const onClickFlipHandler = () => {
     setFrontSide(!frontSide); //toggle front to back, or back to front
-    restartDeck();
+    if (cardCounter === deck.cards.length) setRestart(!restart);
   };
 
   const onClickNextCardHandler = () => {
     setFrontSide(true); //starting on front side of next card
-    setCardCounter(cardCounter + 1); //if we're on the backside, we move on to next card so increase card counter
+    if (cardCounter < deck.cards.length) setCardCounter(cardCounter + 1); //if we're on the backside, we move on to next card so increase card counter
+    console.log(cardCounter);
   };
-
-
 
   return (
     <React.Fragment>
