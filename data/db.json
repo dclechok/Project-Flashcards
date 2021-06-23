@@ -1,39 +1,22 @@
 {
   "decks": [
     {
-      "name": "Daniel",
-      "description": "Lechok",
+      "name": "This is Deck1",
+      "description": "This is Deck1's description",
       "id": 1
-    },
-    {
-      "name": "No no",
-      "description": "No no no",
-      "id": 2
     }
   ],
   "cards": [
     {
-      "deckId": "1",
-      "front": "aaa",
-      "back": "aaaa",
-      "id": 1
-    },
-    {
-      "deckId": "1",
-      "front": "Danny",
-      "back": "Lewc",
-      "id": 2
-    },
-    {
-      "deckId": "1",
-      "front": "aere",
-      "back": "",
+      "deckId": 1,
+      "front": "Bey",
+      "back": "herere",
       "id": 3
     },
     {
       "deckId": 1,
-      "front": "ererer",
-      "back": "aereaer",
+      "front": "aaa",
+      "back": "aaa",
       "id": 4
     }
   ]

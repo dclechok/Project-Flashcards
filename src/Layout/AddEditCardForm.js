@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { updateCard, createCard } from "../utils/api";
+import { readCard } from '../utils/api/index';
 
 function AddEditCardForm({ cardId = null }) {
   const { deckId } = useParams();
@@ -13,6 +14,21 @@ function AddEditCardForm({ cardId = null }) {
 
   const abortController = new AbortController();
   const [newCard, setNewCard] = useState(newCardTemplate);
+
+  async function readTheCard() {
+    try {
+      const response = await readCard(cardId, abortController.signal);
+      setNewCard(response);
+    } catch (err) {
+      console.log(err);
+    }
+    return () => abortController.abort();
+  }
+  useEffect(() => {
+    console.log('hello');
+    readTheCard();
+  }, [cardId]);
+
 
   const handleFormChange = (event) => {
     setNewCard({
@@ -28,8 +44,8 @@ function AddEditCardForm({ cardId = null }) {
       const card = {
           ...newCard,
         [event.target.id]: event.target.value,
-        deckId: deckId,
-        id: cardId,
+        deckId: parseInt(deckId),
+        id: parseInt(cardId),
       };
       setNewCard(card); //build the card we're updating
       //keep the same id as card we're editing

@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouteMatch, Link } from "react-router-dom";
-import { readDeck, createCard } from "../utils/api";
+import { readDeck } from "../utils/api";
 import AddEditCardForm from "./AddEditCardForm";
 
 function AddCard() {
   const { path } = useRouteMatch();
   const { deckId } = useParams();
-  const newCardTemplate = {
-    deckId: deckId,
-    front: "",
-    back: "",
-  };
+
   const [deck, setDeck] = useState({});
   const abortController = new AbortController();
-  // const [newCard, setNewCard] = useState(newCardTemplate);
 
   async function readTheDeck() {
     try {
@@ -27,24 +22,6 @@ function AddCard() {
   useEffect(() => {
     readTheDeck();
   }, [deckId]);
-
-  // const handleFormChange = (event) => {
-  //   setNewCard({
-  //     ...newCard,
-  //     [event.target.id]: event.target.value,
-  //   }); //create a controlled input
-  // };
-
-  // const onSubmitHandler = async (event) => {
-  //   event.preventDefault();
-  //   setNewCard({
-  //     [event.target.id]: event.target.value,
-  //     deckId: deckId,
-  //   });
-  //   //createCard
-  //   await createCard(deckId, newCard, abortController.signal);
-  //   setNewCard(newCardTemplate);
-  // };
 
   return (
     <React.Fragment>
