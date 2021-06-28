@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { readDeck } from "../utils/api/index";
 import { useParams, useHistory, useRouteMatch, Link } from "react-router-dom";
+
+
+
 
 function StudyDeck() {
   const { deckId } = useParams();
@@ -9,10 +12,11 @@ function StudyDeck() {
   const [cardCounter, setCardCounter] = useState(0);
   const [frontSide, setFrontSide] = useState(true); //starting cards on the front side of the card
   const [lastCard, setLastCard] = useState(false);
-  const abortController = new AbortController();
-  const history = useHistory();
 
-  async function readTheDeck() {
+  const history = useHistory();
+  const callRead = useCallback( readTheDeck, [deckId]);
+
+  async function readTheDeck(abortController) {
     try {
       const response = await readDeck(deckId, abortController.signal);
       setDeck(response);
@@ -22,9 +26,11 @@ function StudyDeck() {
   }
 
   useEffect(() => {
-    readTheDeck();
+    const abortController = new AbortController();
     setLastCard(false);
-  }, []);
+    callRead(abortController);
+    return () => abortController.abort();
+  }, [callRead]);
 
   useEffect(() => {
     function restartDeck() {
@@ -38,7 +44,7 @@ function StudyDeck() {
       }
     }
     restartDeck();
-  }, [cardCounter, frontSide]);
+  }, [cardCounter, frontSide, history, lastCard]);
 
   const onClickFlipHandler = () => {
     setFrontSide(!frontSide); //toggle front to back, or back to front

@@ -6,10 +6,11 @@ function EditDeck() {
   const { path } = useRouteMatch();
   const { deckId } = useParams(); //get the current deck's id for input placeholder data
   const [deck, setDeck] = useState({}); //incoming deck
-  const abortController = new AbortController();
+
   const history = useHistory();
 
   useEffect(() => {
+    const abortController = new AbortController();
     async function readTheDeck() {
       try {
         const response = await readDeck(deckId, abortController.signal);
@@ -20,7 +21,7 @@ function EditDeck() {
     }
     readTheDeck();
     return () => abortController.abort();
-  }, []);
+  }, [deckId]);
 
   const onChangeHandler = (event) => {
     setDeck({ ...deck, [event.target.id]: event.target.value }); //set our deck with new information according to form
@@ -31,7 +32,7 @@ function EditDeck() {
     console.log("submit form");
     async function updateTheDeck() {
       try {
-        await updateDeck(deck, abortController.signal);
+        await updateDeck(deck);
         //what can we use response for?
         history.push(`/decks/${deckId}`); //push our user to the url of the newly created deck
       } catch (err) {
@@ -40,8 +41,6 @@ function EditDeck() {
     }
     updateTheDeck();
   };
- 
-  console.log(path);
   return (
     <React.Fragment>
       <p className="card" style={{ backgroundColor: "lightgray" }}>

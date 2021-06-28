@@ -2,25 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useHistory, useRouteMatch } from "react-router-dom";
 import { deleteDeck, readDeck, deleteCard } from "../utils/api/index";
 
+async function readTheDeck(deckId, setDeck) {
+  const abortController = new AbortController();
+  try {
+    const response = await readDeck(deckId, abortController.signal);
+    setDeck(response);
+  } catch (err) {
+    console.log(err);
+  }
+  return () => abortController.abort();
+}
+
 function ViewDeck() {
   const { path } = useRouteMatch();
   const { deckId } = useParams();
   const history = useHistory();
   const abortController = new AbortController();
   const [deck, setDeck] = useState([]);
-
-  async function readTheDeck() {
-    try {
-      const response = await readDeck(deckId, abortController.signal);
-      setDeck(response);
-    } catch (err) {
-      console.log(err);
-    }
-    return () => abortController.abort();
-  }
+  
   useEffect(() => {
-    console.log('hello');
-    readTheDeck();
+    readTheDeck(deckId, setDeck);
   }, [deckId]);
 
   const deleteDeckHandler = async () => {
@@ -70,7 +71,7 @@ function ViewDeck() {
       {deck.cards &&
         deck.cards.map((card, key) => {
           return (
-            <div className="card" id={key} style={{ margin: "0 20% 20px 20%" }}>
+            <div className="card" key={key} style={{ margin: "0 20% 20px 20%" }}>
               <p>{card.front}</p>
               <p>{card.back}</p>
               <Link

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
+import { useParams, Link, useHistory } from "react-router-dom";
 import { updateCard, createCard } from "../utils/api";
-import { readCard } from '../utils/api/index';
+import { readCard } from "../utils/api/index";
 
 function AddEditCardForm({ cardId = null }) {
   const { deckId } = useParams();
+  const history = useHistory();
   const newCardTemplate = {
     deckId: deckId,
     front: "",
@@ -12,23 +13,26 @@ function AddEditCardForm({ cardId = null }) {
     id: 0,
   };
 
-  const abortController = new AbortController();
   const [newCard, setNewCard] = useState(newCardTemplate);
 
-  async function readTheCard() {
+  async function readTheCard(abortController) {
     try {
+      if(!cardId) return
       const response = await readCard(cardId, abortController.signal);
       setNewCard(response);
     } catch (err) {
       console.log(err);
     }
-    return () => abortController.abort();
-  }
-  useEffect(() => {
-    console.log('hello');
-    readTheCard();
-  }, [cardId]);
 
+  }
+
+  const handleRead = useCallback(readTheCard, [cardId]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    handleRead(abortController);
+    return () => abortController.abort();
+  }, [cardId, handleRead]);
 
   const handleFormChange = (event) => {
     setNewCard({
@@ -38,34 +42,41 @@ function AddEditCardForm({ cardId = null }) {
   };
 
   const onSubmitHandler = async (event) => {
-    event.preventDefault(); //prevent page from reloading after form submission
-    if (cardId) {
-      //if we sent in cardId to update
-      const card = {
+    event.preventDefault(); //prevent page from reloading after form submission'
+    if (newCard.front && newCard.back) {
+      if (cardId) {
+        //if we sent in cardId to update
+        const card = {
           ...newCard,
-        [event.target.id]: event.target.value,
-        deckId: parseInt(deckId),
-        id: parseInt(cardId),
-      };
-      setNewCard(card); //build the card we're updating
-      //keep the same id as card we're editing
-      try {
-        console.log(cardId, card.id);
-        await updateCard(card, abortController.signal); //update care
-      } catch (err) {
-        console.log(err, "Error updating card");
+          [event.target.id]: event.target.value,
+          deckId: parseInt(deckId),
+          id: parseInt(cardId),
+        };
+        setNewCard(card); //build the card we're updating
+        //keep the same id as card we're editing
+        try {
+          await updateCard(card); //update care
+        } catch (err) {
+          console.log(err, "Error updating card");
+        }
+        setNewCard(newCardTemplate);
+      } else {
+        //if we're not updating then create a brand new card
+        setNewCard({
+          [event.target.id]: event.target.value,
+          deckId: deckId,
+        });
+        try {
+          await createCard(deckId, newCard);
+        } catch (err) {
+          console.log(err, "Error creating card");
+        }
+        setNewCard(newCardTemplate);
       }
-    } else {
-      //if we're not updating then create a brand new card
-      setNewCard({
-        [event.target.id]: event.target.value,
-        deckId: deckId,
-      });
-      try {
-        await createCard(deckId, newCard, abortController.signal);
-      } catch (err) {
-        console.log(err, "Error creating card");
-      }
+
+      history.push(`/decks/${deckId}`);
+    }else{
+      window.confirm("Form fields cannot be black.");
     }
     // setNewCard(newCardTemplate);
   };

@@ -8,19 +8,22 @@ function AddCard() {
   const { deckId } = useParams();
 
   const [deck, setDeck] = useState({});
-  const abortController = new AbortController();
 
-  async function readTheDeck() {
-    try {
-      const response = await readDeck(deckId, abortController.signal);
-      setDeck(response);
-    } catch (err) {
-      console.log(err, "Failure reading deck");
-    }
-  }
 
   useEffect(() => {
+    const abortController = new AbortController();
+    async function readTheDeck() {
+
+      try {
+        const response = await readDeck(deckId, abortController.signal);
+        setDeck(response);
+      } catch (err) {
+        console.log(err, "Failure reading deck");
+      }
+    }
+
     readTheDeck();
+    return () => abortController.abort();
   }, [deckId]);
 
   return (

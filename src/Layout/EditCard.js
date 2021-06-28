@@ -1,17 +1,19 @@
-import React, {useState, useEffect } from "react";
-import { Link, useParams, useRouteMatch } from 'react-router-dom';
-import { readDeck } from '../utils/api/index';
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useRouteMatch } from "react-router-dom";
+import { readDeck } from "../utils/api/index";
 import AddEditCardForm from "./AddEditCardForm";
 
 function EditCard() {
-    const { path } = useRouteMatch();
-    const { deckId } = useParams();
-    const { cardId } = useParams();
+  const { path } = useRouteMatch();
+  const { deckId } = useParams();
+  const { cardId } = useParams();
 
-    const [deck, setDeck] = useState({});
+  const [deck, setDeck] = useState({});
+
+  useEffect(() => {
     const abortController = new AbortController();
     // const [newCard, setNewCard] = useState(newCardTemplate);
-  
+
     async function readTheDeck() {
       try {
         const response = await readDeck(deckId, abortController.signal);
@@ -20,12 +22,11 @@ function EditCard() {
         console.log(err, "Failure reading deck");
       }
     }
-    
-    useEffect(() => {
-      readTheDeck();
-    }, [deckId]);
+    readTheDeck();
+    return () => abortController.abort();
+  }, [deckId]);
 
-    return (
+  return (
     <React.Fragment>
       <p className="card" style={{ backgroundColor: "lightgray" }}>
         <span>
@@ -34,7 +35,7 @@ function EditCard() {
           <Link to={path}> Edit Card</Link>
         </span>
       </p>
-      <AddEditCardForm cardId={cardId}/>
+      <AddEditCardForm cardId={cardId} />
     </React.Fragment>
   );
 }
